@@ -1,0 +1,81 @@
+- hosts: all
+  gather_facts: no
+  become: true
+
+  roles:
+    - role: geerlingguy.pip
+      tags: init
+
+  tasks:
+    - name: Install required system packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - virtualenv
+        state: latest
+        update_cache: true
+      tags: init
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      tags: init
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+      tags: init
+
+    - name: Update apt and install Docker packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        state: latest
+        update_cache: true
+      tags: init
+
+    - name: Add user to the Docker group
+      user:
+        name: as
+        groups: docker
+        append: yes
+      tags: init
+
+    - name: Start Redmine application
+      community.docker.docker_container:
+        name: redmine
+        image: "redmine:{{ redmine.version }}"
+        restart_policy: always
+        state: started
+        ports:
+          - "{{ redmine.published_port }}:3000"
+        env:
+          REDMINE_DB_POSTGRES: "{{ redmine.db.host }}"
+          REDMINE_DB_PORT: "{{ redmine.db.port }}"
+          REDMINE_DB_DATABASE: "{{ redmine.db.database }}"
+          REDMINE_DB_USERNAME: "{{ redmine.db.username }}"
+          REDMINE_DB_PASSWORD: "{{ redmine.db.password }}"
+          REDMINE_SECRET_KEY_BASE: "{{ redmine.secret_key_base }}"
+
+      tags: start
+
+    - name: Stop Redmine application
+      community.docker.docker_container:
+        name: redmine
+        state: absent
+      tags: [ never, stop ]
+
+- hosts: webservers
+  gather_facts: no
+  become: true
+  roles:
+    - role: datadog.datadog
+      tags: [ init, init-datadog ]

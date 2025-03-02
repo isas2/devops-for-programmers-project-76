@@ -1,0 +1,22 @@
+---
+datadog_api_key: "{{ vault_datadog_api_key }}"
+datadog_site: datadoghq.eu
+datadog_checks:
+  http_check:
+    init_config:
+    instances:
+    - name: redmine_http_check
+      url: http://localhost:{{ redmine.published_port }}
+      timeout: 15
+      min_collection_interval: 15
+
+redmine:
+  db:
+    host: redmine-db.zabedu.ru
+    port: 6432
+    database: postgres
+    username: postgres
+    password: "{{ vault_redmine_db_password }}"
+  published_port: 80
+  secret_key_base: "{{ vault_redmine_secret_key_base }}"
+  version: 6.0.3
