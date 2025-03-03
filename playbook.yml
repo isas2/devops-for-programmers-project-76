@@ -1,9 +1,11 @@
-- hosts: all
+- hosts: webservers
   become: true
-
   roles:
     - role: geerlingguy.pip
       tags: init
+
+    - role: datadog.datadog
+      tags: [ init, init-datadog ]
 
   tasks:
     - name: Install required system packages
@@ -72,8 +74,3 @@
         state: absent
       tags: [ never, stop ]
 
-- hosts: webservers
-  become: true
-  roles:
-    - role: datadog.datadog
-      tags: [ init, init-datadog ]

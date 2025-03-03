@@ -4,16 +4,16 @@ prepare-env:
 	touch .vault_pas
 
 init:
-	ansible-playbook -vv playbook.yml --tags init
+	ansible-playbook playbook.yml --tags init
 
 init-datadog:
 	ansible-playbook playbook.yml --tags init-datadog
 
 start:
-	ansible-playbook playbook.yml --tags start
+	ansible-playbook -l webservers playbook.yml --tags start
 
 stop:
-	ansible-playbook playbook.yml --tags stop
+	ansible-playbook -l webservers playbook.yml --tags stop
 
 pas-gen:
 	@tr -dc 'A-Za-z0-9!@#$?%^&*_=.,:;' < /dev/urandom | head -c 64 | tee .vault_pas > /dev/null 2>&1
