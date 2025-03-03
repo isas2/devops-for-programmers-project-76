@@ -2,7 +2,7 @@
 ansible_python:
   version:
     major: 3
-    minor: 12
+    minor: 8
 
 pip_install_packages:
 - name: docker
