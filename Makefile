@@ -4,7 +4,7 @@ prepare-env:
 	touch .vault_pas
 
 init:
-	ansible-playbook playbook.yml --tags init
+	ansible-playbook -vv playbook.yml --tags init
 
 init-datadog:
 	ansible-playbook playbook.yml --tags init-datadog

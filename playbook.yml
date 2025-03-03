@@ -1,5 +1,4 @@
 - hosts: all
-  gather_facts: no
   become: true
 
   roles:
@@ -74,7 +73,6 @@
       tags: [ never, stop ]
 
 - hosts: webservers
-  gather_facts: no
   become: true
   roles:
     - role: datadog.datadog
