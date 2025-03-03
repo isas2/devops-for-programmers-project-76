@@ -16,7 +16,7 @@
           - curl
           - software-properties-common
           - virtualenv
-        state: latest
+        state: present
         update_cache: true
       tags: init
 
@@ -39,7 +39,7 @@
           - docker-ce-cli
           - containerd.io
           - docker-compose
-        state: latest
+        state: present
         update_cache: true
       tags: init
 
