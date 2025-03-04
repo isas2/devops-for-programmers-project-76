@@ -33,7 +33,7 @@
 
 ## Deployed application
 
-htps://redmine.zabedu.ru
+https://redmine.zabedu.ru
 
 ## Used app docker image
 
